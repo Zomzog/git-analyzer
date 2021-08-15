@@ -1,0 +1,3 @@
+analyzer:
+  message: pony
+  temporary-folder: /tmp/pony
