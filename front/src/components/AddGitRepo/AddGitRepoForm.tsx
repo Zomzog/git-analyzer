@@ -1,5 +1,6 @@
+import { Button, TextField } from '@material-ui/core';
 import React from 'react'
-import { Field, InjectedFormProps, reduxForm } from 'redux-form';
+import { Field, InjectedFormProps, reduxForm, WrappedFieldProps } from 'redux-form';
 import { addGitRepoValidation } from './AddGitRepoValidation';
 
 export interface IAddGitRepoFormState {
@@ -10,21 +11,30 @@ export interface IAddGitRepoFormState {
 export interface IAddGitRepoFormDispatch {
 }
 
+interface IFieldProps extends WrappedFieldProps {
+  label: string
+}
+
+const renderTextField = (props: IFieldProps) => (
+  <TextField
+    label={props.label}
+    placeholder={props.label}
+    error={props.meta.touched && props.meta.invalid}
+    helperText={props.meta.touched && props.meta.error}
+
+    {...props.input}
+  />
+)
+
 const FormComponent = (props: IAddGitRepoFormDispatch & InjectedFormProps<IAddGitRepoFormState, IAddGitRepoFormDispatch>) => (
   <div>
     <div>Add Git Repo page</div>
     <form onSubmit={props.handleSubmit}>
-      <div>
-        <label htmlFor="name">Name</label>
-        <Field name="name" component="input" type="text" />
-      </div>
-      <div>
-        <label htmlFor="url">Url</label>
-        <Field name="url" component="input" type="text" />
-      </div>
-      <button type="submit"
-      //disabled={!props.valid || props.pristine || props.submitting}
-      >Add</button>
+      <Field name="name" component={renderTextField} required label="name" />
+      <Field name="url" component={renderTextField} required label="url" />
+      <Button type="submit"
+        disabled={!props.valid || props.pristine || props.submitting}
+      >Add</Button>
     </form>
   </div>
 );
